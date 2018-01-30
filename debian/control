@@ -1,0 +1,11 @@
+Source: movealong-repo
+Section: admin
+Priority: extra
+Maintainer: Nate Riffe <inkblot@movealong.org>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.4
+
+Package: movealong-repo
+Architecture: all
+Description: Installs the movealong apt repo
+ This package installs an apt source for the movealong apt repo

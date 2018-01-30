@@ -1,0 +1,15 @@
+#!/bin/bash
+
+
+# Set up any specific permissions needed...
+  chmod '0644' '/etc/apt/trusted.gpg.d/inkblot-movealong-keyring.gpg'
+
+# Run postinstall scripts on install if defined
+if [ $1 = configure ] && [ -z $2 ] ; then
+  :
+fi
+
+# Run postinstall scripts on upgrade if defined
+if [ $1 = configure ] && [ -n $2 ] ; then
+  :
+fi

@@ -1,0 +1,17 @@
+movealong-repo (1.0.2) stable; urgency=medium
+
+  * Include correct signing key
+
+ -- Nate Riffe <inkblot@ld2.movealong.org>  Mon, 29 Jan 2018 20:04:01 -0600
+
+movealong-repo (1.0.1) stable; urgency=medium
+
+  * Fix postinst
+
+ -- Nate Riffe <inkblot@ld2.movealong.org>  Mon, 29 Jan 2018 19:50:37 -0600
+
+movealong-repo (1.0.0) stable; urgency=medium
+
+  * Initial release.
+
+ -- Nate Riffe <inkblot@movealong.org>  Mon, 29 Jan 2018 18:45:04 -0600
