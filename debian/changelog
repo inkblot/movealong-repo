@@ -1,3 +1,10 @@
+movealong-repo (2.0.0) stable; urgency=medium
+
+  * Install signing key in /usr/share/keyrings
+  * Update sources list to reference this key specifically
+
+ -- Nate Riffe <inkblot@movealong.org>  Sun, 08 Sep 2024 08:23:45 -0500
+
 movealong-repo (1.0.2) stable; urgency=medium
 
   * Include correct signing key

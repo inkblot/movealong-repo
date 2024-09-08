@@ -1,0 +1,13 @@
+The Debian Package movealong-repo
+----------------------------
+
+This package installs the apt source and apt key for the package repository at
+https://dist.movealong.org/apt/
+
+Build and and release
+----------------------------
+
+# vim debian/changelog
+# debuild -uc -us
+# deb-s3 upload --bucket dist.movealong.org --prefix apt/ --codename stable --preserve-versions --sign inkblot@movealong.org ../movealong-repo_2.0.0_all.deb
+# debian/rules clean
