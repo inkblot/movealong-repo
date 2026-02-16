@@ -1,9 +1,0 @@
-#!/bin/bash
-set -e
-
-if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
-    rm -f /etc/apt/sources.list.d/movealong.list
-    rm -f /etc/apt/sources.list.d/movealong.list.template
-fi
-
-
