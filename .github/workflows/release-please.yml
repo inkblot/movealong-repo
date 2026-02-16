@@ -1,0 +1,74 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      version: ${{ steps.release.outputs.version }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          release-type: debian
+          package-name: movealong-repo
+
+  publish:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.release-please.outputs.tag_name }}
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y debhelper devscripts
+
+      - name: Build package
+        run: debuild -us -uc
+
+      - name: Upload to GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ needs.release-please.outputs.tag_name }} \
+            ../movealong-repo_${{ needs.release-please.outputs.version }}_all.deb
+
+      - name: Install deb-s3
+        run: |
+          sudo gem install deb-s3
+
+      - name: Import GPG signing key
+        run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+
+      - name: Publish to S3 apt repository
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          CODENAMES="stable jammy noble focal bullseye bookworm trixie"
+          DEB="../movealong-repo_${{ needs.release-please.outputs.version }}_all.deb"
+          for codename in $CODENAMES; do
+            echo "Publishing to $codename..."
+            deb-s3 upload \
+              --bucket dist.movealong.org \
+              --prefix apt/ \
+              --codename "$codename" \
+              --preserve-versions \
+              --sign inkblot@movealong.org \
+              "$DEB"
+          done

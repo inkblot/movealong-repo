@@ -1,0 +1,1 @@
+deb [signed-by=/usr/share/keyrings/inkblot-movealong-keyring.gpg] https://dist.movealong.org/apt ${CODENAME} main

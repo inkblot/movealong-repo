@@ -1,3 +1,22 @@
+movealong-repo (3.0.0) stable; urgency=medium
+
+  * Major modernization release
+  * Update Standards-Version to 4.6.2 (from 3.9.4)
+  * Update debhelper compatibility to 13 (from 8)
+  * Remove deprecated debian/compat file
+  * Add multi-distribution support with automatic detection
+  * Support Ubuntu 22.04, 24.04 and Debian 11, 12, 13
+  * Use distribution-specific codenames (jammy, noble, bookworm, etc)
+  * Rewrite postinst to detect and configure for specific distribution
+  * Remove unnecessary maintainer scripts (preinst, prerm)
+  * Add GitHub Actions CI/CD pipeline with matrix builds
+  * Add automated semantic versioning via release-please
+  * Add conventional commits workflow
+  * Change Priority from "extra" to "optional" (extra is deprecated)
+  * Add Vcs-Git and Vcs-Browser fields to debian/control
+
+ -- Nate Riffe <inkblot@movealong.org>  Thu, 29 Jan 2026 20:23:43 -0600
+
 movealong-repo (2.0.0) stable; urgency=medium
 
   * Install signing key in /usr/share/keyrings

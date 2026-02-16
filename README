@@ -4,10 +4,87 @@ The Debian Package movealong-repo
 This package installs the apt source and apt key for the package repository at
 https://dist.movealong.org/apt/
 
-Build and and release
+The package automatically detects your distribution (Ubuntu/Debian) and configures
+the appropriate repository source.
+
+Supported Distributions
 ----------------------------
 
-# vim debian/changelog
-# debuild -uc -us
-# deb-s3 upload --bucket dist.movealong.org --prefix apt/ --codename stable --preserve-versions --sign inkblot@movealong.org ../movealong-repo_2.0.0_all.deb
-# debian/rules clean
+Ubuntu: 20.04 (focal), 22.04 (jammy), 24.04 (noble)
+Debian: 11 (bullseye), 12 (bookworm), 13 (trixie)
+
+Installation
+----------------------------
+
+# Download and install
+wget https://dist.movealong.org/apt/pool/movealong-repo_3.0.0_all.deb
+sudo dpkg -i movealong-repo_3.0.0_all.deb
+sudo apt-get update
+
+Development
+----------------------------
+
+This project uses conventional commits and automated semantic versioning.
+
+Commit message format:
+  feat: new feature (minor version bump)
+  fix: bug fix (patch version bump)
+  feat!: breaking change (major version bump)
+  chore: maintenance (no version bump)
+
+Build and Test Locally
+----------------------------
+
+# Install build dependencies
+sudo apt-get install debhelper devscripts lintian
+
+# Build package
+debuild -uc -us
+
+# Test with lintian
+lintian --info ../movealong-repo_*.deb
+
+# Test installation in Docker
+docker run -it --rm -v $(pwd)/../:/build ubuntu:jammy bash
+  cd /build && apt-get update && apt-get install -y lsb-release
+  dpkg -i movealong-repo_*.deb
+  cat /etc/apt/sources.list.d/movealong.list
+
+Release Process
+----------------------------
+
+Releases are automated via release-please:
+
+1. Make changes using conventional commits
+2. Push to master branch
+3. release-please creates a PR with updated version/changelog
+4. Merge the release PR
+5. release-please creates a GitHub release with .deb artifact
+6. Manually upload to S3 using deb-s3:
+
+   deb-s3 upload --bucket dist.movealong.org --prefix apt/ \
+     --codename <distro-codename> --preserve-versions \
+     --sign inkblot@movealong.org movealong-repo_*.deb
+
+Note: You'll need to upload for each supported codename:
+  jammy, noble, focal (Ubuntu)
+  bullseye, bookworm, trixie (Debian)
+
+CI/CD
+----------------------------
+
+GitHub Actions workflows:
+- build-test.yml: Runs on every push/PR, tests across 5 distros
+- release-please.yml: Creates releases from conventional commits
+
+Repository Structure Requirements
+----------------------------
+
+The S3 repository must have distribution-specific directories:
+
+https://dist.movealong.org/apt/dists/jammy/
+https://dist.movealong.org/apt/dists/noble/
+https://dist.movealong.org/apt/dists/bookworm/
+... etc
+
+Use deb-s3 with --codename flag to create these structures.

@@ -38,23 +38,39 @@ validate_codename() {
             ;;
         *)
             echo "Warning: Unsupported distribution codename: $codename" >&2
+            echo "Falling back to 'stable'" >&2
+            echo "stable"
             return 1
             ;;
     esac
 }
 
-# Only configure codename on fresh install, not upgrade
-if [ "$1" = "configure" ] && [ -z "$2" ]; then
+# Main installation logic
+if [ "$1" = "configure" ]; then
     CODENAME=$(detect_codename)
 
-    if ! validate_codename "$CODENAME"; then
+    # Validate and potentially override with stable
+    if ! validate_codename "$CODENAME" >/dev/null 2>&1; then
         CODENAME="stable"
     fi
 
+    TEMPLATE="/etc/apt/sources.list.d/movealong.list.template"
     TARGET="/etc/apt/sources.list.d/movealong.list"
-    sed -i "s/stable/$CODENAME/" "$TARGET"
 
-    echo "Configured movealong repository for: $CODENAME"
+    # Generate sources list from template
+    if [ -f "$TEMPLATE" ]; then
+        sed "s/\${CODENAME}/$CODENAME/g" "$TEMPLATE" > "$TARGET"
+        chmod 644 "$TARGET"
+
+        # Clean up template
+        rm -f "$TEMPLATE"
+
+        echo "Configured movealong repository for: $CODENAME"
+    else
+        echo "Warning: Template file not found, using fallback" >&2
+        echo "deb [signed-by=/usr/share/keyrings/inkblot-movealong-keyring.gpg] https://dist.movealong.org/apt stable main" > "$TARGET"
+        chmod 644 "$TARGET"
+    fi
 fi
 
-#DEBHELPER#
+

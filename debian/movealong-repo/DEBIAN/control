@@ -1,14 +1,12 @@
-Source: movealong-repo
+Package: movealong-repo
+Version: 3.0.0
+Architecture: all
+Maintainer: Nate Riffe <inkblot@movealong.org>
+Installed-Size: 19
+Depends: lsb-release | base-files (>= 11)
 Section: admin
 Priority: optional
-Maintainer: Nate Riffe <inkblot@movealong.org>
-Build-Depends: debhelper-compat (= 13)
-Standards-Version: 4.6.2
 Homepage: https://dist.movealong.org/apt/
-
-Package: movealong-repo
-Architecture: all
-Depends: ${misc:Depends}, lsb-release | base-files (>= 11)
 Description: Installs the movealong apt repository
  This package installs an apt source for the movealong apt repository
  at https://dist.movealong.org/apt/.
