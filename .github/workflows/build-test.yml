@@ -23,11 +23,14 @@ jobs:
       - name: Run lintian
         run: lintian --info --display-info --pedantic ../*.deb || true
 
+      - name: Collect build artifacts
+        run: cp ../*.deb .
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: debian-package
-          path: ../*.deb
+          path: "*.deb"
           retention-days: 7
 
   test-install:
