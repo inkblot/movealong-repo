@@ -1,11 +1,19 @@
 Source: movealong-repo
 Section: admin
-Priority: extra
+Priority: optional
 Maintainer: Nate Riffe <inkblot@movealong.org>
-Build-Depends: debhelper (>= 8.0.0)
-Standards-Version: 3.9.4
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+Homepage: https://dist.movealong.org/apt/
+Vcs-Git: https://github.com/inkblot/movealong-repo.git
+Vcs-Browser: https://github.com/inkblot/movealong-repo
 
 Package: movealong-repo
 Architecture: all
-Description: Installs the movealong apt repo
- This package installs an apt source for the movealong apt repo
+Depends: ${misc:Depends}, lsb-release | base-files (>= 11)
+Description: Installs the movealong apt repository
+ This package installs an apt source for the movealong apt repository
+ at https://dist.movealong.org/apt/.
+ .
+ The package automatically detects the distribution (Ubuntu/Debian) and
+ codename to configure the appropriate repository source.

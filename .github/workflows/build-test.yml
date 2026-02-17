@@ -1,0 +1,93 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  lint-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y debhelper devscripts lintian build-essential
+
+      - name: Build package
+        run: debuild -us -uc
+
+      - name: Run lintian
+        run: lintian --info --display-info --pedantic --fail-on warning ../*.deb
+
+      - name: Collect build artifacts
+        run: cp ../*.deb .
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: debian-package
+          path: "*.deb"
+          retention-days: 7
+
+  test-install:
+    needs: lint-and-build
+    strategy:
+      fail-fast: false
+      matrix:
+        distro:
+          - debian:11
+          - debian:12
+          - debian:13
+          - ubuntu:22.04
+          - ubuntu:24.04
+        include:
+          - distro: debian:11
+            codename: bullseye
+          - distro: debian:12
+            codename: bookworm
+          - distro: debian:13
+            codename: trixie
+          - distro: ubuntu:22.04
+            codename: jammy
+          - distro: ubuntu:24.04
+            codename: noble
+
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ matrix.distro }}
+
+    steps:
+      - name: Download built package
+        uses: actions/download-artifact@v4
+        with:
+          name: debian-package
+
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y lsb-release
+
+      - name: Install package
+        run: dpkg -i *.deb || apt-get install -f -y
+
+      - name: Verify installation
+        run: |
+          test -f /etc/apt/sources.list.d/movealong.list || exit 1
+          test -f /usr/share/keyrings/inkblot-movealong-keyring.gpg || exit 1
+          grep -q "deb \[signed-by=/usr/share/keyrings/inkblot-movealong-keyring.gpg\]" \
+            /etc/apt/sources.list.d/movealong.list || exit 1
+
+      - name: Verify codename detection
+        run: |
+          grep -q "${{ matrix.codename }}" /etc/apt/sources.list.d/movealong.list || exit 1
+          echo "✓ Codename ${{ matrix.codename }} detected correctly"
+
+      - name: Test removal
+        run: |
+          apt-get remove -y movealong-repo
+          test ! -f /etc/apt/sources.list.d/movealong.list || exit 1
+          echo "✓ Package removed cleanly"

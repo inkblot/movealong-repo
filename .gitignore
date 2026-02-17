@@ -1,0 +1,6 @@
+*.deb
+debian/debhelper-build-stamp
+debian/files
+debian/movealong-repo/
+debian/movealong-repo.debhelper.log
+debian/movealong-repo.substvars

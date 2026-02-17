@@ -1,12 +1,8 @@
 #!/bin/bash
+set -e
 
-# Run post-removal scripts on upgrade if defined
-if [ $1 = upgrade ] && [ -n $2 ] ; then
-  :
+if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
+    rm -f /etc/apt/sources.list.d/movealong.list
 fi
 
-# Run post-removal scripts on removal if defined
-if [ $1 = remove ] && [ -z $2 ] ; then
-  :
-fi
-
+#DEBHELPER#

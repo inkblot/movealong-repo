@@ -3,9 +3,17 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+# Use debhelper 13 compatibility level
 %:
 	dh $@
 
-# override_dh_usrlocal to do nothing
+# Use gzip compression for compatibility with older distributions (Debian 11)
+override_dh_builddeb:
+	dh_builddeb -- -Zgzip
+
+# override_dh_usrlocal to do nothing (we install to /etc and /usr/share)
 override_dh_usrlocal:
+
+# No tests to run
+override_dh_auto_test:
 
