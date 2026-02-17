@@ -1,0 +1,2 @@
+# Gzip compression is intentional for Debian 11 compatibility
+movealong-repo source: custom-compression-in-debian-rules *

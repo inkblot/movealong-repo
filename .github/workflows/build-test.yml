@@ -21,7 +21,7 @@ jobs:
         run: debuild -us -uc
 
       - name: Run lintian
-        run: lintian --info --display-info --pedantic ../*.deb || true
+        run: lintian --info --display-info --pedantic --fail-on warning ../*.deb
 
       - name: Collect build artifacts
         run: cp ../*.deb .

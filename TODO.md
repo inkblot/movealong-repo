@@ -3,8 +3,8 @@
 ## v3.0.0 Release
 
 ### Local
-- [ ] Review all uncommitted changes
-- [ ] Build and test locally: `debuild -uc -us && lintian --pedantic ../movealong-repo_*.deb`
+- [X] Review all uncommitted changes
+- [ ] Build and test locally: `debuild -uc -us && lintian --pedantic --fail-on warning ../movealong-repo_*.deb`
 - [ ] Test fresh install in Docker (should get distro-specific codename)
 - [ ] Test upgrade in Docker (should keep `stable`)
 - [ ] Fill in Vcs-Git and Vcs-Browser URLs in debian/control

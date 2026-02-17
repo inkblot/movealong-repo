@@ -5,7 +5,7 @@ the movealong apt repository at https://dist.movealong.org/apt/.
 
 - Build dependencies: debhelper, devscripts, lintian
 - Build: `debuild -uc -us`
-- Lint: `lintian --pedantic ../movealong-repo_*.deb`
+- Lint: `lintian --pedantic --fail-on warning ../movealong-repo_*.deb`
 
 ## Architecture
 
