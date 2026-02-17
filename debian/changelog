@@ -1,3 +1,10 @@
+movealong-repo (3.0.1) stable; urgency=medium
+
+  * Update LOG.md ([fc531c1](https://github.com/inkblot/movealong-
+    repo/commit/fc531c1aa1b17bd237bde5c6b638660d2f7819a4))
+
+ -- Nate Riffe <inkblot@movealong.org>  Tue, 17 Feb 2026 23:36:59 +0000
+
 movealong-repo (3.0.0) stable; urgency=medium
 
   * modernize package with multi-distro support
