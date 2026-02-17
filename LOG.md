@@ -14,8 +14,18 @@ Implemented from PLAN.md:
 
 - Removed template-based approach (movealong.list.template) in favor of shipping movealong.list directly with `stable` default — simpler upgrade path for existing users
 - postinst now only rewrites codename on fresh install (`configure` with no previous version), not on upgrade
-- release-please changed from `simple` to `debian` release type so it manages debian/changelog automatically
 - Added S3 publishing to release workflow (deb-s3 upload to all 7 codenames via common pool)
 - GPG signing in CI via `GPG_PRIVATE_KEY` secret
 
-Changes are uncommitted.
+## CI/CD Fixes (2026-02-16)
+
+- Fixed `upload-artifact@v4` rejecting `../*.deb` — copies .deb into workspace first
+- Added `.gitignore` for `*.deb` and debian build products
+- Added `debian/copyright` (MIT, DEP-5 format)
+- Added lintian overrides: `package-installs-apt-sources` (binary), `custom-compression-in-debian-rules` (source)
+- Changed lintian from `|| true` to `--fail-on warning`
+- Fixed release-please: `release-type: debian` is invalid, switched to `simple` with manifest-based config
+- Added `update-debian-changelog` job to release-please workflow — runs `dch` on PR branch with entries from CHANGELOG.md
+- Reset version to 2.0.0 (last actual release); release-please will create the 3.0.0 release PR
+- Added `version.txt`, `release-please-config.json`, `.release-please-manifest.json`
+- Filled in Vcs-Git and Vcs-Browser in debian/control
