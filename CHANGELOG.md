@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.1](https://github.com/inkblot/movealong-repo/compare/v3.0.0...v3.0.1) (2026-02-17)
+
+
+### Documentation
+
+* Update LOG.md ([fc531c1](https://github.com/inkblot/movealong-repo/commit/fc531c1aa1b17bd237bde5c6b638660d2f7819a4))
+
 ## [3.0.0](https://github.com/inkblot/movealong-repo/compare/v2.0.0...v3.0.0) (2026-02-17)
 
 
