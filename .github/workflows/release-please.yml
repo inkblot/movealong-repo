@@ -13,6 +13,8 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     outputs:
+      prs_created: ${{ steps.release.outputs.prs_created }}
+      pr: ${{ steps.release.outputs.pr }}
       release_created: ${{ steps.release.outputs.release_created }}
       version: ${{ steps.release.outputs.version }}
       tag_name: ${{ steps.release.outputs.tag_name }}
@@ -20,12 +22,81 @@ jobs:
       - uses: googleapis/release-please-action@v4
         id: release
         with:
-          release-type: debian
-          package-name: movealong-repo
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  update-debian-changelog:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.prs_created == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Parse PR info
+        id: pr-info
+        run: |
+          echo '${{ needs.release-please.outputs.pr }}' | jq -r '"branch=" + .headBranchName' >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pr-info.outputs.branch }}
+          fetch-depth: 0
+
+      - name: Read version
+        id: version
+        run: echo "version=$(cat version.txt)" >> "$GITHUB_OUTPUT"
+
+      - name: Check if debian/changelog is already up to date
+        id: check
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq devscripts > /dev/null
+          CURRENT=$(dpkg-parsechangelog -S Version)
+          if [ "$CURRENT" = "${{ steps.version.outputs.version }}" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Extract changelog entries from CHANGELOG.md
+        if: steps.check.outputs.skip == 'false'
+        run: |
+          awk '
+            /^## \[/ { if (found) exit; found=1; next }
+            found && /^\* / { print substr($0, 3) }
+          ' CHANGELOG.md > /tmp/entries.txt
+
+          if [ ! -s /tmp/entries.txt ]; then
+            echo "Release ${{ steps.version.outputs.version }}" > /tmp/entries.txt
+          fi
+
+      - name: Update debian/changelog
+        if: steps.check.outputs.skip == 'false'
+        env:
+          DEBEMAIL: inkblot@movealong.org
+          DEBFULLNAME: Nate Riffe
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          FIRST=true
+          while IFS= read -r entry; do
+            if [ "$FIRST" = true ]; then
+              dch --newversion "$VERSION" --distribution stable --urgency medium "$entry"
+              FIRST=false
+            else
+              dch --append "$entry"
+            fi
+          done < /tmp/entries.txt
+
+      - name: Commit and push
+        if: steps.check.outputs.skip == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add debian/changelog
+          git commit -m "chore: update debian/changelog for ${{ steps.version.outputs.version }}"
+          git push
 
   publish:
     needs: release-please
-    if: ${{ needs.release-please.outputs.release_created }}
+    if: ${{ needs.release-please.outputs.release_created == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -35,7 +106,7 @@ jobs:
       - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y debhelper devscripts
+          sudo apt-get install -y debhelper devscripts build-essential
 
       - name: Build package
         run: debuild -us -uc
@@ -48,12 +119,10 @@ jobs:
             ../movealong-repo_${{ needs.release-please.outputs.version }}_all.deb
 
       - name: Install deb-s3
-        run: |
-          sudo gem install deb-s3
+        run: sudo gem install deb-s3
 
       - name: Import GPG signing key
-        run: |
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+        run: echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
 
       - name: Publish to S3 apt repository
         env:
