@@ -5,6 +5,8 @@ Maintainer: Nate Riffe <inkblot@movealong.org>
 Build-Depends: debhelper-compat (= 13)
 Standards-Version: 4.6.2
 Homepage: https://dist.movealong.org/apt/
+Vcs-Git: https://github.com/inkblot/movealong-repo.git
+Vcs-Browser: https://github.com/inkblot/movealong-repo
 
 Package: movealong-repo
 Architecture: all

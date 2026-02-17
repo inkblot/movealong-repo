@@ -4,22 +4,22 @@
 
 ### Local
 - [X] Review all uncommitted changes
-- [ ] Build and test locally: `debuild -uc -us && lintian --pedantic --fail-on warning ../movealong-repo_*.deb`
-- [ ] Test fresh install in Docker (should get distro-specific codename)
-- [ ] Test upgrade in Docker (should keep `stable`)
-- [ ] Fill in Vcs-Git and Vcs-Browser URLs in debian/control
+- [X] Build and test locally: `debuild -uc -us && lintian --pedantic --fail-on warning ../movealong-repo_*.deb`
+- [X] Test fresh install in Docker (should get distro-specific codename)
+- [/] Test upgrade in Docker (should keep `stable`)
+- [X] Fill in Vcs-Git and Vcs-Browser URLs in debian/control
 
 ### GitHub Setup
-- [ ] Create GitHub repo
-- [ ] Add remote and push master branch
-- [ ] Configure GitHub secrets:
+- [X] Create GitHub repo
+- [X] Add remote and push master branch
+- [X] Configure GitHub secrets:
   - `GPG_PRIVATE_KEY` — ASCII-armored private key for inkblot@movealong.org
   - `AWS_ACCESS_KEY_ID`
   - `AWS_SECRET_ACCESS_KEY`
-- [ ] Verify build-test.yml CI passes on first push
+- [X] Verify build-test.yml CI passes on first push
 
 ### First Release
-- [ ] Commit with conventional commit message (e.g. `feat!: modernize package to v3.0.0 with multi-distro support`)
+- [X] Commit with conventional commit message (e.g. `feat!: modernize package to v3.0.0 with multi-distro support`)
 - [ ] Push to master
 - [ ] Wait for release-please to open a release PR (updates debian/changelog automatically)
 - [ ] Review and merge the release PR
