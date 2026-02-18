@@ -52,6 +52,8 @@
 
 ### Phase 2: Switch CI to new key
 - [ ] Replace `GPG_PRIVATE_KEY` GitHub secret with contents of `/tmp/new-signing-key.asc`
+- [ ] Update `--sign` in `release-please.yml` from old fingerprint to `28FA0CDCB9289CCFA2497190791CE7779788EB53`
+- [ ] Remove `GPG_PASSPHRASE` GitHub secret (no longer needed)
 - [ ] Push a change to trigger release-please CI pipeline
 - [ ] Verify CI publish job succeeds (signs with new key)
 - [ ] Verify: `apt update` still succeeds on a test system
