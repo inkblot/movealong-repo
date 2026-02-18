@@ -146,7 +146,7 @@ jobs:
               --prefix apt/ \
               --codename "$codename" \
               --preserve-versions \
-              --sign 28FA0CDCB9289CCFA2497190791CE7779788EB53 \
+              --sign 559D7CDB4E302F55C4E88DDB3120F8F824423EDA \
               --gpg-options "$GPG_OPTS" \
               "$DEB"
           done
