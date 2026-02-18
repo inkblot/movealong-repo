@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.1](https://github.com/inkblot/movealong-repo/compare/v3.1.0...v3.1.1) (2026-02-18)
+
+
+### Bug Fixes
+
+* sign with old key fingerprint until secret is swapped ([5471581](https://github.com/inkblot/movealong-repo/commit/54715811d769d3657b837989188363b3babb0cf8))
+* sign with old key fingerprint until secret is swapped ([25ca318](https://github.com/inkblot/movealong-repo/commit/25ca3187b5d9b450ffb7b0d916289afe245ea4b7))
+
 ## [3.1.0](https://github.com/inkblot/movealong-repo/compare/v3.0.1...v3.1.0) (2026-02-18)
 
 
