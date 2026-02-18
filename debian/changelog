@@ -1,3 +1,14 @@
+movealong-repo (3.1.1) stable; urgency=medium
+
+  * sign with old key fingerprint until secret is swapped
+    ([5471581](https://github.com/inkblot/movealong-
+    repo/commit/54715811d769d3657b837989188363b3babb0cf8))
+  * sign with old key fingerprint until secret is swapped
+    ([25ca318](https://github.com/inkblot/movealong-
+    repo/commit/25ca3187b5d9b450ffb7b0d916289afe245ea4b7))
+
+ -- Nate Riffe <inkblot@movealong.org>  Wed, 18 Feb 2026 03:27:41 +0000
+
 movealong-repo (3.1.0) stable; urgency=medium
 
   * add dedicated CI signing key to keyring
