@@ -122,13 +122,21 @@ jobs:
         run: sudo gem install deb-s3
 
       - name: Import GPG signing key
-        run: echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+        run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+          gpgconf --kill gpg-agent
 
       - name: Publish to S3 apt repository
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
+          GPG_OPTS="--pinentry-mode loopback"
+          if [ -n "$GPG_PASSPHRASE" ]; then
+            GPG_OPTS="$GPG_OPTS --passphrase \"$GPG_PASSPHRASE\""
+          fi
           CODENAMES="stable jammy noble focal bullseye bookworm trixie"
           DEB="../movealong-repo_${{ needs.release-please.outputs.version }}_all.deb"
           for codename in $CODENAMES; do
@@ -138,6 +146,7 @@ jobs:
               --prefix apt/ \
               --codename "$codename" \
               --preserve-versions \
-              --sign inkblot@movealong.org \
+              --sign 28FA0CDCB9289CCFA2497190791CE7779788EB53 \
+              --gpg-options "$GPG_OPTS" \
               "$DEB"
           done
