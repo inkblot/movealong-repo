@@ -138,6 +138,6 @@ jobs:
               --prefix apt/ \
               --codename "$codename" \
               --preserve-versions \
-              --sign inkblot@movealong.org \
+              --sign 28FA0CDCB9289CCFA2497190791CE7779788EB53 \
               "$DEB"
           done

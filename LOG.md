@@ -29,3 +29,10 @@ Implemented from PLAN.md:
 - Reset version to 2.0.0 (last actual release); release-please will create the 3.0.0 release PR
 - Added `version.txt`, `release-please-config.json`, `.release-please-manifest.json`
 - Filled in Vcs-Git and Vcs-Browser in debian/control
+
+## GPG Signing Key Migration (2026-02-17)
+
+- Generated new dedicated passphrase-less signing key for CI (fingerprint: 28FA0CDCB9289CCFA2497190791CE7779788EB53)
+- Updated `inkblot-movealong-keyring.gpg` to contain both old (3120F8F824423EDA) and new keys
+- Updated `release-please.yml` to sign with new key fingerprint instead of email address
+- Phase 1c–2c remaining: manual release, secret update, CI release (see memory bank for details)
