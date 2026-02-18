@@ -35,7 +35,7 @@ jobs:
         run: |
           echo '${{ needs.release-please.outputs.pr }}' | jq -r '"branch=" + .headBranchName' >> "$GITHUB_OUTPUT"
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ steps.pr-info.outputs.branch }}
           fetch-depth: 0
@@ -99,7 +99,7 @@ jobs:
     if: ${{ needs.release-please.outputs.release_created == 'true' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ needs.release-please.outputs.tag_name }}
 
