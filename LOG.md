@@ -35,4 +35,5 @@ Implemented from PLAN.md:
 - Generated new dedicated passphrase-less signing key for CI (fingerprint: 28FA0CDCB9289CCFA2497190791CE7779788EB53)
 - Updated `inkblot-movealong-keyring.gpg` to contain both old (3120F8F824423EDA) and new keys
 - Updated `release-please.yml` to sign with new key fingerprint instead of email address
-- Phase 1c–2c remaining: manual release, secret update, CI release (see memory bank for details)
+- Added loopback pinentry and `GPG_PASSPHRASE` secret support to workflow for non-interactive signing with passphrase-protected key
+- Phase 1c–2c remaining: manual release, secret update, CI release (see TODO.md)

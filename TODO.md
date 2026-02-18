@@ -32,7 +32,9 @@
 - [X] Generate new passphrase-less signing key (fingerprint: `28FA0CDCB9289CCFA2497190791CE7779788EB53`)
 - [X] Update `inkblot-movealong-keyring.gpg` to contain both old and new public keys
 - [X] Update `release-please.yml` to sign with new key fingerprint
-- [ ] Merge `force-3.0.1` branch to master
+- [X] Add loopback pinentry + `GPG_PASSPHRASE` support to workflow
+- [ ] Add `GPG_PASSPHRASE` GitHub secret (old key's passphrase)
+- [ ] Merge `ci-signing-key` branch to master
 - [ ] Build locally: `debuild -uc -us`
 - [ ] Manually bump version (version.txt, .release-please-manifest.json, CHANGELOG.md, debian/changelog)
 - [ ] Upload .deb to GitHub release
