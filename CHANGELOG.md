@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.1.0](https://github.com/inkblot/movealong-repo/compare/v3.0.1...v3.1.0) (2026-02-18)
+
+
+### Features
+
+* add dedicated CI signing key to keyring ([58c3257](https://github.com/inkblot/movealong-repo/commit/58c3257b7aee44d40995877cb0339c8b6a8bd190))
+* add dedicated CI signing key to keyring ([d3d9e37](https://github.com/inkblot/movealong-repo/commit/d3d9e37b86da279fb9c302765c2cb9d71999ac57))
+
+
+### Bug Fixes
+
+* support passphrase-protected GPG key in CI publish ([8be2bd9](https://github.com/inkblot/movealong-repo/commit/8be2bd9ba3e6c9747b5fcde3946f536ae6907026))
+
 ## [3.0.1](https://github.com/inkblot/movealong-repo/compare/v3.0.0...v3.0.1) (2026-02-17)
 
 
