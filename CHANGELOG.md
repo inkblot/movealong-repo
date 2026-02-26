@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.2.0](https://github.com/inkblot/movealong-repo/compare/v3.1.1...v3.2.0) (2026-02-26)
+
+
+### Features
+
+* switch CI signing to new passphrase-less GPG key ([332cf5b](https://github.com/inkblot/movealong-repo/commit/332cf5b860720a754a3b93e8e87a513697002da6))
+
 ## [3.1.1](https://github.com/inkblot/movealong-repo/compare/v3.1.0...v3.1.1) (2026-02-18)
 
 
