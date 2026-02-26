@@ -1,3 +1,11 @@
+movealong-repo (3.2.0) stable; urgency=medium
+
+  * switch CI signing to new passphrase-less GPG key
+    ([332cf5b](https://github.com/inkblot/movealong-
+    repo/commit/332cf5b860720a754a3b93e8e87a513697002da6))
+
+ -- Nate Riffe <inkblot@movealong.org>  Thu, 26 Feb 2026 04:15:23 +0000
+
 movealong-repo (3.1.1) stable; urgency=medium
 
   * sign with old key fingerprint until secret is swapped
