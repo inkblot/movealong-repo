@@ -20,11 +20,11 @@
 
 ### First Release
 - [X] Commit with conventional commit message (e.g. `feat!: modernize package to v3.0.0 with multi-distro support`)
-- [ ] Push to master
-- [ ] Wait for release-please to open a release PR (updates debian/changelog automatically)
-- [ ] Review and merge the release PR
-- [ ] Verify publish job: .deb uploaded to GitHub Release, S3 updated for all 7 codenames
-- [ ] Verify S3: `curl -I https://dist.movealong.org/apt/dists/{stable,jammy,noble,focal,bullseye,bookworm,trixie}/Release`
+- [X] Push to master
+- [X] Wait for release-please to open a release PR (updates debian/changelog automatically)
+- [X] Review and merge the release PR
+- [X] Verify publish job: .deb uploaded to GitHub Release, S3 updated for all 7 codenames
+- [X] Verify S3: `curl -I https://dist.movealong.org/apt/dists/{stable,jammy,noble,focal,bullseye,bookworm,trixie}/Release`
 
 ## GPG Signing Key Migration
 
@@ -33,12 +33,12 @@
 - [X] Update `inkblot-movealong-keyring.gpg` to contain both old and new public keys
 - [X] Update `release-please.yml` to sign with new key fingerprint
 - [X] Add loopback pinentry + `GPG_PASSPHRASE` support to workflow
-- [ ] Add `GPG_PASSPHRASE` GitHub secret (old key's passphrase)
-- [ ] Merge `ci-signing-key` branch to master
-- [ ] Build locally: `debuild -uc -us`
-- [ ] Manually bump version (version.txt, .release-please-manifest.json, CHANGELOG.md, debian/changelog)
-- [ ] Upload .deb to GitHub release
-- [ ] Upload to S3 with old key for all 7 codenames:
+- [X] Add `GPG_PASSPHRASE` GitHub secret (old key's passphrase)
+- [X] Merge `ci-signing-key` branch to master
+- [/] Build locally: `debuild -uc -us`
+- [X] Manually bump version (version.txt, .release-please-manifest.json, CHANGELOG.md, debian/changelog)
+- [X] Upload .deb to GitHub release
+- [X] Upload to S3 with old key for all 7 codenames:
   ```
   CODENAMES="stable jammy noble focal bullseye bookworm trixie"
   DEB="../movealong-repo_<version>_all.deb"
@@ -48,19 +48,28 @@
       --sign 559D7CDB4E302F55C4E88DDB3120F8F824423EDA "$DEB"
   done
   ```
-- [ ] Verify: `apt update` succeeds on a test system using the repo
+- [X] Verify: `apt update` succeeds on a test system using the repo
 
 ### Phase 2: Switch CI to new key
-- [ ] Replace `GPG_PRIVATE_KEY` GitHub secret with contents of `/tmp/new-signing-key.asc`
-- [ ] Update `--sign` in `release-please.yml` from old fingerprint to `28FA0CDCB9289CCFA2497190791CE7779788EB53`
-- [ ] Remove `GPG_PASSPHRASE` GitHub secret (no longer needed)
-- [ ] Push a change to trigger release-please CI pipeline
-- [ ] Verify CI publish job succeeds (signs with new key)
-- [ ] Verify: `apt update` still succeeds on a test system
+- [X] Replace `GPG_PRIVATE_KEY` GitHub secret with contents of `/tmp/new-signing-key.asc`
+- [X] Update `--sign` in `release-please.yml` from old fingerprint to `28FA0CDCB9289CCFA2497190791CE7779788EB53`
+- [X] Remove `GPG_PASSPHRASE` GitHub secret (no longer needed)
+- [X] Push a change to trigger release-please CI pipeline
+- [X] Verify CI publish job succeeds (signs with new key)
+- [X] Verify: `apt update` still succeeds on a test system
 
 ### Phase 3: Remove old key (future)
 - [ ] Remove old public key (`559D7CDB4E302F55C4E88DDB3120F8F824423EDA`) from `inkblot-movealong-keyring.gpg`
 - [ ] Release updated package
+
+## CloudFront Cache Invalidation
+
+S3 objects have no `Cache-Control` header, so CloudFront uses its default TTL (~24h). After deb-s3 uploads, stale metadata is served until the cache expires. This prevents clients from seeing new package versions.
+
+- [ ] Get CloudFront distribution ID: `aws cloudfront list-distributions --query "DistributionList.Items[?contains(Aliases.Items, 'dist.movealong.org')].{Id:Id,Domain:DomainName}" --output table`
+- [ ] Invalidate cache now: `aws cloudfront create-invalidation --distribution-id <ID> --paths "/apt/dists/*"`
+- [ ] Verify: `apt update && apt-cache policy movealong-repo` shows 3.1.1
+- [ ] Add CloudFront invalidation step to `release-please.yml` after deb-s3 uploads (needs distribution ID as secret or hardcoded)
 
 ## Future
 
